@@ -1,1 +1,0 @@
-// No need as About Page have vision and mission section
