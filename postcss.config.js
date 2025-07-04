@@ -1,20 +1,11 @@
-const config = {
-  plugins: ["@tailwindcss/postcss"],
+const tailwindcss = require('tailwindcss');
+const tailwindcssAnimate = require('tailwindcss-animate');
+const autoprefixer = require('autoprefixer');
+
+module.exports = {
+  plugins: [
+    tailwindcss,
+    tailwindcssAnimate,
+    autoprefixer
+  ],
 };
-
-export default config;
-
-
-// import tailwindcss from 'tailwindcss'
-// import tailwindcssAnimate from 'tailwindcss-animate'
-// import autoprefixer from 'autoprefixer'
-
-// const config = {
-//   plugins: [
-//     tailwindcss,
-//     tailwindcssAnimate,
-//     autoprefixer
-//   ]
-// }
-
-// export default config
