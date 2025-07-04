@@ -1,5 +1,6 @@
 import Heading from "@/components/Header";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function AnimalLawsPage() {
   const laws = [
@@ -30,43 +31,43 @@ export default function AnimalLawsPage() {
     title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
 
   return (
-    <section className="flex flex-col justify-center max-w-6xl px-4  mx-auto sm:px-6">
-      <Heading>Know the Laws that Protect Animals</Heading>
+        <section className="flex flex-col justify-center max-w-6xl px-4  mx-auto sm:px-6">
+          <Heading>Know the Laws that Protect Animals</Heading>
 
-      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        {laws.map((law) => (
-          <div
-            key={law.id}
-            className="flex flex-col overflow-hidden bg-white border border-gray-200 rounded-lg shadow hover:shadow-md dark:bg-gray-800 dark:border-gray-700 transition-shadow"
-          >
-            <div className="relative w-full h-48">
-              <Image
-                src={law.image}
-                alt={law.title}
-                fill
-                className="rounded-t-lg object-cover"
-                priority
-              />
-            </div>
-            <div className="flex flex-col justify-between flex-grow p-6">
-              <div>
-                <h3 className="mb-2 text-lg font-semibold text-gray-800 dark:text-white">
-                  {law.title}
-                </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-300">
-                  {law.summary}
-                </p>
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {laws.map((law) => (
+              <div
+              key={law.id}
+              className="flex flex-col overflow-hidden bg-white border border-gray-200 rounded-lg shadow hover:shadow-md dark:bg-gray-800 dark:border-gray-700 transition-shadow"
+            >
+              <div className="relative w-full h-48">
+                <Image
+                  src={law.image}
+                  alt={law.title}
+                  fill
+                  className="rounded-t-lg object-cover"
+                  priority
+                />
               </div>
-              <div className="mt-4">
-                <a
-                  href={`/animal-law/${slugify(law.title)}`}
-                  className="text-sm font-medium text-teal-600 uppercase border-b border-transparent hover:border-teal-600"
-                >
-                  Read More →
-                </a>
+              <div className="flex flex-col justify-between flex-grow p-6">
+                <div>
+                  <h3 className="mb-2 text-lg font-semibold text-gray-800 dark:text-white">
+                    {law.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    {law.summary}
+                  </p>
+                </div>
+                <div className="mt-4">
+                  <Link
+                    href={`/animal-law/${slugify(law.title)}`}
+                    className="text-sm font-medium text-teal-600 uppercase border-b border-transparent hover:border-teal-600"
+                  >
+                    Read More →
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
         ))}
       </div>
     </section>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Bookmark, Clock, Share2 } from "lucide-react";
+import Link from "next/link";
 
 const mockLaw = {
   title: "Prevention of Cruelty to Animals Act, 1960",
@@ -50,9 +51,9 @@ export default function LawReader() {
           <ul className="space-y-2 text-sm text-gray-700">
             {mockLaw.sections.map((section, i) => (
               <li key={i}>
-                <a href={`#section-${i}`} className="hover:text-teal-600">
+                <Link href={`#section-${i}`} scroll={true} className="hover:text-teal-600">
                   {section.heading}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
@@ -97,12 +98,12 @@ export default function LawReader() {
 
         {/* Navigation (optional if multiple laws exist) */}
         <div className="mt-12 flex justify-between text-sm text-teal-600">
-          <a href="/animal-laws/abc-program" className="hover:underline">
+          <Link href="/animal-laws/abc-program" className="hover:underline">
             ← ABC Rules, 2001
-          </a>
-          <a href="/animal-law/wildlife-protection" className="hover:underline">
+          </Link>
+          <Link href="/animal-law/wildlife-protection" className="hover:underline">
             Wildlife Protection Act, 1972 →
-          </a>
+          </Link>
         </div>
       </main>
     </div>
