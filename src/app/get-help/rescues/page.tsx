@@ -2,7 +2,7 @@
 
 import CWrapper from '@/components/wrappers/component-wrapper';
 import Heading from '@/components/wrappers/Header';
-import Head from 'next/head';
+// ...existing code...
 import React, { useState } from 'react';
 
 export default function RescueHelpPage() {

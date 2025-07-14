@@ -43,7 +43,7 @@ export default function Home() {
             </ol>
 
             <p>
-              Whether you're adopting or fostering, you're helping a voiceless soul start a new chapter in life. Your support
+              Whether you&apos;re adopting or fostering, you&apos;re helping a voiceless soul start a new chapter in life. Your support
               makes all the difference!
             </p>
           </div>

@@ -3,7 +3,7 @@ import Image from 'next/image';
 import CWrapper from '@/components/wrappers/component-wrapper';
 import ImageComparisonSlider from '@/components/ImageComparisonSlider';
 import VideoComparisonSlider from '@/components/VideoComparisonSlider';
-import YouTubeEmbed from '@/components/YouTubeEmbed';
+// ...existing code...
 const galleryImages = [
   {
     src: 'https://images.unsplash.com/photo-1525253086316-d0c936c814f8',

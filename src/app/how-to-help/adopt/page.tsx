@@ -1,4 +1,4 @@
-import AnimalSelector from "@/components/animal-selector";
+// ...existing code...
 import AdoptionInfoSection from "@/components/AdoptionInfoSection";
 import CWrapper from "@/components/wrappers/component-wrapper";
 import Heading from "@/components/wrappers/Header";
