@@ -1,6 +1,8 @@
 export default function OurValuesSection() {
   return (
-    <section className="bg-white py-10 px-6 sm:px-10 lg:px-20">
+    <section className="bg-gradient-to-b from-rose-50 to-white dark:from-slate-900 dark:to-slate-800 py-10 px-6 sm:px-10 lg:px-20">
+
+     {/* <section className="bg-white dark:bg-slate-800  py-10 px-6 sm:px-10 lg:px-20"> */}
 
       <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
         {[
@@ -31,12 +33,12 @@ export default function OurValuesSection() {
         ].map((value, i) => (
           <div
             key={i}
-            className="bg-teal-50 border border-teal-100 p-6 rounded-xl shadow-sm hover:shadow-md transition"
+            className="bg-teal-50 dark:bg-gray-800 border shadow-lg rounded-2xl p-8 "
           >
-            <h3 className="text-xl font-semibold text-teal-800 mb-2">
+            <h3 className="text-xl font-semibold text-teal-800 dark:text-white mb-2">
               {value.title}
             </h3>
-            <p className="text-gray-700 text-sm">{value.description}</p>
+            <p className="text-gray-700 dark:text-gray-300 text-sm">{value.description}</p>
           </div>
         ))}
       </div>

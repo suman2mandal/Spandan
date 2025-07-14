@@ -16,14 +16,14 @@ interface Animal {
 
 const adoptableAnimals:Animal[] = [
   {
-    id: "bruno",
-    name: "Bruno",
-    quote: "I’m strong now, I just need a family.",
-    story: "Rescued from a highway accident, Bruno has made a full recovery.",
-    age: "2 years",
-    health: "Vaccinated and neutered",
-    location: "Kolkata",
-    img: "/adoptables/bruno.jpg",
+    id: "Dori",
+    name: "Dori",
+    quote: "I just want a safe place and gentle friends—will you be my family?",
+    story: "Because other dogs were biting her, her owner wants to send her for adoption to find a loving, safe home.",
+    age: "4 years",
+    health: "Vaccinated, not neutered, no health issues",
+    location: "Baguihati",
+    img: "https://res.cloudinary.com/dfwoqb3vm/image/upload/v1752517137/WhatsApp_Image_2025-07-14_at_23.46.37_61db99bc_y6rnob.jpg",
   },
   {
     id: "maya",
@@ -33,7 +33,7 @@ const adoptableAnimals:Animal[] = [
     age: "1.5 years",
     health: "Vaccinated, dewormed",
     location: "Howrah",
-    img: "/adoptables/maya.jpg",
+    img: "https://images.unsplash.com/photo-1643208411980-7d73e38cd668?w=500&auto=format&fit=crop&q=60",
   },
   {
     id: "shadow",
@@ -43,7 +43,7 @@ const adoptableAnimals:Animal[] = [
     age: "3 years",
     health: "Healthy, fully vaccinated",
     location: "South 24 Parganas",
-    img: "/adoptables/shadow.jpg",
+    img: "https://images.unsplash.com/photo-1656073841838-2c527439b0a4?w=500&auto=format&fit=crop&q=60",
   },
   {
     id: "luna",
@@ -53,7 +53,7 @@ const adoptableAnimals:Animal[] = [
     age: "4 years",
     health: "Spayed, vaccinated",
     location: "Diamond Harbour",
-    img: "/adoptables/luna.jpg",
+    img: "https://images.unsplash.com/photo-1640910004087-f45c0e6472da?w=500&auto=format&fit=crop&q=60",
   },
   {
     id: "rocky",
@@ -63,7 +63,7 @@ const adoptableAnimals:Animal[] = [
     age: "2.5 years",
     health: "Neutered, vaccinated",
     location: "Barasat",
-    img: "/adoptables/rocky.jpg",
+    img: "https://images.unsplash.com/photo-1643208411980-7d73e38cd668?w=500&auto=format&fit=crop&q=60",
   },
     {
     id: "bruno",
@@ -73,7 +73,7 @@ const adoptableAnimals:Animal[] = [
     age: "2 years",
     health: "Vaccinated and neutered",
     location: "Kolkata",
-    img: "/adoptables/bruno.jpg",
+    img: "https://images.unsplash.com/photo-1656073841838-2c527439b0a4?w=500&auto=format&fit=crop&q=60",
   },
   {
     id: "maya",
@@ -83,7 +83,7 @@ const adoptableAnimals:Animal[] = [
     age: "1.5 years",
     health: "Vaccinated, dewormed",
     location: "Howrah",
-    img: "/adoptables/maya.jpg",
+    img: "https://images.unsplash.com/photo-1640910004087-f45c0e6472da?w=500&auto=format&fit=crop&q=60",
   },
   {
     id: "shadow",
@@ -93,7 +93,7 @@ const adoptableAnimals:Animal[] = [
     age: "3 years",
     health: "Healthy, fully vaccinated",
     location: "South 24 Parganas",
-    img: "/adoptables/shadow.jpg",
+    img: "https://images.unsplash.com/photo-1656073841838-2c527439b0a4?w=500&auto=format&fit=crop&q=60",
   },
   {
     id: "luna",
@@ -103,7 +103,7 @@ const adoptableAnimals:Animal[] = [
     age: "4 years",
     health: "Spayed, vaccinated",
     location: "Diamond Harbour",
-    img: "/adoptables/luna.jpg",
+    img: "https://images.unsplash.com/photo-1643208411980-7d73e38cd668?w=500&auto=format&fit=crop&q=60",
   },
   {
     id: "rocky",
@@ -113,7 +113,7 @@ const adoptableAnimals:Animal[] = [
     age: "2.5 years",
     health: "Neutered, vaccinated",
     location: "Barasat",
-    img: "/adoptables/rocky.jpg",
+    img: "https://images.unsplash.com/photo-1629470897136-1c84636af71e?w=500&auto=format&fit=crop&q=60",
   },
 ];
 
@@ -201,41 +201,49 @@ const handlePrev = () => {
               height={200}
               className="rounded-lg object-cover w-full h-48"
             />
-            <h3 className="mt-4 text-lg font-semibold text-teal-900">
+            <h3 className="mt-4 text-lg font-semibold text-teal-900 dark:text-teal-500">
               {animal.name}
             </h3>
-            <p className="text-gray-700 italic text-sm">&quot;{animal.quote}&quot;</p>
+            <p className="text-gray-700 dark:text-white italic text-sm">&quot;{animal.quote}&quot;</p>
           </div>
         ))}
       </div>
 
       {/* Modal Popup */}
       {selectedAnimal && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-          <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-lg relative">
+        <div
+          className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center"
+          onClick={e => {
+            if (e.target === e.currentTarget) setSelectedAnimal(null);
+          }}
+        >
+          <div className="bg-white dark:bg-gray-700 rounded-xl shadow-xl p-8 w-full max-w-xl min-h-[600px] flex flex-col items-center relative">
             <button
               onClick={() => setSelectedAnimal(null)}
-              className="absolute top-2 right-2 text-gray-500 hover:text-red-500"
+              className="absolute top-2 right-2 dark:text-white text-gray-500 hover:text-red-500"
             >
               ✕
             </button>
-            <Image
-              src={selectedAnimal.img}
-              alt={selectedAnimal.name}
-              width={500}
-              height={300}
-              className="rounded-lg object-cover mb-4"
-            />
-            <h2 className="text-2xl font-bold text-teal-900 mb-2">
+            <div className="w-full h-[320px] flex items-center justify-center mb-4 bg-gray-200 dark:bg-gray-800 rounded-lg overflow-hidden">
+              <Image
+                src={selectedAnimal.img}
+                alt={selectedAnimal.name}
+                width={500}
+                height={320}
+                className="object-contain w-full h-full"
+                priority
+              />
+            </div>
+            <h2 className="text-2xl font-bold text-teal-900 dark:text-teal-500 mb-2 text-center">
               {selectedAnimal.name}
             </h2>
-            <p className="italic text-gray-700 mb-4">
+            <p className="italic text-gray-700 dark:text-white mb-4 text-center">
               &quot;{selectedAnimal.quote}&quot;
             </p>
-            <p className="text-sm text-gray-800 mb-2">
+            <p className="text-sm dark:text-white text-gray-800 mb-2 text-center">
               <strong>Story:</strong> {selectedAnimal.story}
             </p>
-            <p className="text-sm text-gray-800">
+            <p className="text-sm dark:text-white text-gray-800 text-center">
               <strong>Age:</strong> {selectedAnimal.age} |{' '}
               <strong>Health:</strong> {selectedAnimal.health} |{' '}
               <strong>Location:</strong> {selectedAnimal.location}

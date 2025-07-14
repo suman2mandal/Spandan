@@ -3,6 +3,8 @@ import aspectRatio from "@tailwindcss/aspect-ratio";
 import flowbitePlugin from "flowbite/plugin"; // ✅ Import Flowbite plugin properly
 
 const config: Config = {
+  darkMode: 'class', // ✅ Enable class-based dark mode
+  // darkMode: ['selector', '[data-theme="dark"]'],
   content: [
     "./node_modules/flowbite/**/*.js",      // ✅ Flowbite components
     "./src/**/*.{js,ts,jsx,tsx,mdx}",       // ✅ Your project files
