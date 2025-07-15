@@ -42,7 +42,7 @@ export default function Foster() {
               <li>We provide guidance, food, and supplies if needed.</li>
               <li>Support is just a call away—always!</li>
               <li>Short-term commitment with long-term impact.</li>
-              <li>Great for people who can't adopt but want to help.</li>
+              <li>Great for people who can&apos;t adopt but want to help.</li>
             </ul>
 
             <h3 className="text-xl font-semibold text-orange-800 mt-6">Fostering Process (Step-by-Step)</h3>

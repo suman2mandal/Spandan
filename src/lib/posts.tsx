@@ -37,3 +37,5 @@ export function getAllPosts(type: 'blog' | 'animal-law'): PostMeta[] {
     };
   });
 }
+
+

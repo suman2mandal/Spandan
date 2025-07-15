@@ -8,7 +8,7 @@ export default function JourneyTimeline() {
     <CWrapper>
     <section className="bg-white rounded-lg p-8 dark:bg-gray-900 py-16">
       <div className="">
-        <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12">Spandan's 7-Year Journey</h2>
+        <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12">Spandan&apos;s 7-Year Journey</h2>
         <ul className="flow-root">
           {/* Year 1 */}
           <li>

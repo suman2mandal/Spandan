@@ -29,7 +29,7 @@ export default function RescueHelpPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMessage('✅ Thank you! We will contact you within 1–3 hours if your request falls within our area & capacity.');
+    setMessage('✅ Thank you! We will contact you within 1–3 hours if your request falls within our area & capacity.&apos;');
   };
 
   return (
@@ -101,10 +101,10 @@ export default function RescueHelpPage() {
     <div>
       <h2 className="text-3xl font-bold mb-4 dark:text-white text-teal-800">🤝 Who Can Submit a Rescue Request?</h2>
       <p className="text-lg mb-4 dark:text-gray-300 text-gray-800">
-        Anyone with compassion — whether you're a local resident, student, vendor, animal lover, or just passing by — you can take action.
+        Anyone with compassion — whether you&apos;re a local resident, student, vendor, animal lover, or just passing by — you can take action.
       </p>
       <p className="text-sm dark:text-gray-300 text-gray-600 italic">
-        There's no requirement for previous experience. If you spot suffering, help them by reaching out to us.
+        There&apos;s no requirement for previous experience. If you spot suffering, help them by reaching out to us.
       </p>
     </div>
     {/* Image */}

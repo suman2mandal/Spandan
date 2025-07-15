@@ -1,17 +1,14 @@
 'use client';
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import YouTubeEmbed from './YouTubeEmbed';
+
 
 interface VideoComparisonSliderProps {
   previous: string; // video src URL
   current: string;  // video src URL
   width?: number;
   height?: number;
-  loop?: boolean;
-  muted?: boolean;
-  controls?: boolean;
-  autoPlay?: boolean;
 }
 
 export default function VideoComparisonSlider({
@@ -19,10 +16,6 @@ export default function VideoComparisonSlider({
   current,
   width = 700,
   height = 500,
-  loop = true,
-  muted = true,
-  controls = false,
-  autoPlay = true,
 }: VideoComparisonSliderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState(50);
@@ -31,7 +24,7 @@ export default function VideoComparisonSlider({
   const startDrag = () => setIsDragging(true);
   const endDrag = () => setIsDragging(false);
 
-  const handleMove = (e: MouseEvent | TouchEvent) => {
+  const handleMove = useCallback((e: MouseEvent | TouchEvent) => {
     if (!containerRef.current || !isDragging) return;
 
     const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
@@ -39,7 +32,7 @@ export default function VideoComparisonSlider({
     const offset = clientX - rect.left;
     const newPos = (offset / rect.width) * 100;
     if (newPos >= 0 && newPos <= 100) setPosition(newPos);
-  };
+  }, [isDragging]);
 
   useEffect(() => {
     const onMouseMove = (e: MouseEvent) => handleMove(e);
@@ -56,7 +49,7 @@ export default function VideoComparisonSlider({
       document.removeEventListener('mouseup', endDrag);
       document.removeEventListener('touchend', endDrag);
     };
-  }, [isDragging]);
+  }, [isDragging, handleMove]);
 
   return (
     <div

@@ -2,22 +2,20 @@ const withMDX = require('@next/mdx')({
   extension: /\.mdx?$/,
   options: {
     providerImportSource: '@mdx-js/react',
+    // If you want to use MDX with React Server Components
+    // you might need additional configuration here
   },
 });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  pageExtensions: ['ts', 'tsx', 'mdx','js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
+  // Enable experimental MDX RS (Rust-based MDX compiler) for better performance
+  experimental: {
+    mdxRs: true,
+  },
+  
+  pageExtensions: ['ts', 'tsx', 'mdx', 'js', 'jsx', 'md'],
   images: {
-    domains: [
-      'res-console.cloudinary.com',
-      'images.unsplash.com',
-      'api.time.com',
-      'res.cloudinary.com',
-      'spandan-ngo-website.vercel.app',
-      'images.pexels.com',
-      'cdn.pixabay.com',
-    ],
     remotePatterns: [
       {
         protocol: 'https',

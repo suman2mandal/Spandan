@@ -147,7 +147,6 @@ export default function GalleryGrid() {
                 <ImageComparisonSlider
                   previous={`${img.src}?w=800&h=800&auto=format`}
                   current={`${img.src2}?w=800&h=800&auto=format`}
-                  alt={img.alt}
                   quality={100}
                   priority
                   placeholder="blur"

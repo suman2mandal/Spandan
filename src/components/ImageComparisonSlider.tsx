@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import Image, { ImageProps } from 'next/image';
 
 interface ComparisonSliderProps extends Omit<ImageProps, 'src'> {
@@ -13,11 +13,10 @@ interface ComparisonSliderProps extends Omit<ImageProps, 'src'> {
 export default function ImageComparisonSlider({
   previous,
   current,
-  alt = '',
   width = 700,
   height = 500,
   ...rest
-}: ComparisonSliderProps) {
+}: Omit<ComparisonSliderProps, 'alt'>) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
@@ -25,7 +24,7 @@ export default function ImageComparisonSlider({
   const startDrag = () => setIsDragging(true);
   const endDrag = () => setIsDragging(false);
 
-  const handleMove = (e: MouseEvent | TouchEvent) => {
+  const handleMove = useCallback((e: MouseEvent | TouchEvent) => {
     if (!containerRef.current || !isDragging) return;
 
     const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
@@ -33,7 +32,7 @@ export default function ImageComparisonSlider({
     const offset = clientX - rect.left;
     const newPos = (offset / rect.width) * 100;
     if (newPos >= 0 && newPos <= 100) setPosition(newPos);
-  };
+  }, [isDragging]);
 
   useEffect(() => {
     const onMouseMove = (e: MouseEvent) => handleMove(e);
@@ -50,7 +49,7 @@ export default function ImageComparisonSlider({
       document.removeEventListener('mouseup', endDrag);
       document.removeEventListener('touchend', endDrag);
     };
-  }, [isDragging]);
+  }, [isDragging, handleMove]);
 
   return (
     <div
@@ -63,8 +62,7 @@ export default function ImageComparisonSlider({
       {/* Previous Image */}
       <Image
         src={previous}
-        // alt={alt}
-        alt='Current Image'
+        alt="Current Image"
         fill
         sizes="100vw"
         className="absolute top-0 left-0 object-cover rounded-xl z-0"
@@ -84,8 +82,7 @@ export default function ImageComparisonSlider({
       >
         <Image
           src={current}
-        //   alt={alt}
-          alt='Previous Image'
+          alt="Previous Image"
           fill
           sizes="100vw"
           className="object-cover rounded-xl"

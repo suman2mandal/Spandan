@@ -111,7 +111,7 @@ export default function CampaignPage() {
           <h2 className="text-3xl md:text-4xl font-semibold mb-4">Want to Start a Campaign?</h2>
           <p className="text-lg max-w-2xl mx-auto mb-8">
             We welcome individuals, schools, and local groups to join hands with us. Raise awareness, organize a drive, or
-            fundraise — we'll support your efforts to create change for animals.
+            fundraise — we&apos;ll support your efforts to create change for animals.
           </p>
           <Link href="/contact" passHref>
             <button className="bg-white text-teal-700 font-semibold px-6 py-3 rounded-full hover:bg-gray-100 transition">
