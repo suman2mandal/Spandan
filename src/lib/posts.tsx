@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
+// import clientPromise from './mongodb';
 
 const CONTENT_ROOT = path.join(process.cwd(), 'content');
 export type PostMeta = {
@@ -39,3 +40,9 @@ export function getAllPosts(type: 'blog' | 'animal-law'): PostMeta[] {
 }
 
 
+// export async function getAllPostSlugs() {
+//   const client = await clientPromise;
+//   const db = client.db('spandan');
+//   const posts = await db.collection('posts').find({}, { projection: { slug: 1, title: 1 } }).toArray();
+//   return posts.map((p) => ({ slug: p.slug, title: p.title }));
+// }

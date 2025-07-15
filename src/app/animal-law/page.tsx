@@ -2,11 +2,38 @@ import CWrapper from "@/components/wrappers/component-wrapper";
 import Heading from "@/components/wrappers/Header";
 import Image from "next/image";
 import Link from "next/link";
-import { getAllPosts } from '@/lib/posts';
+import clientPromise from "@/lib/mongodb";
+import { compileMDX } from "next-mdx-remote/rsc";
 
-export default function AnimalLawsPage() {
-  const posts = getAllPosts('animal-law');
-  if (!posts || posts.length === 0) return null;
+type Frontmatter = {
+  title: string;
+  description: string;
+  coverImage?: string;
+  slug?: string;
+};
+
+export default async function AnimalLawsPage() {
+  const client = await clientPromise;
+  const db = client.db("Animal-Law");
+
+  const rawLaws = await db.collection("Legal-Provisions").find({}).toArray();
+
+  // Parse frontmatter from each law post
+  const laws = await Promise.all(
+    rawLaws.map(async (law) => {
+      const { frontmatter } = await compileMDX<Frontmatter>({
+        source: law.content,
+        options: { parseFrontmatter: true },
+      });
+
+      return {
+        ...frontmatter,
+        slug: law.slug || slugify(frontmatter.title),
+      };
+    })
+  );
+
+  if (!laws || laws.length === 0) return null;
 
   const slugify = (title: string) =>
     title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
@@ -20,7 +47,7 @@ export default function AnimalLawsPage() {
         />
 
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {posts.map((law) => (
+          {laws.map((law) => (
             <div
               key={law.title}
               className="flex flex-col overflow-hidden dark:bg-gray-700 border dark:border-gray-900 border-gray-200 rounded-lg shadow hover:shadow-md transition-shadow"
@@ -45,7 +72,7 @@ export default function AnimalLawsPage() {
                 </div>
                 <div className="mt-4">
                   <Link
-                    href={`/animal-law/${law.slug || slugify(law.title)}`}
+                    href={`/animal-law/${law.slug}`}
                     className="text-sm font-medium text-teal-600 uppercase border-b border-transparent hover:border-teal-600"
                   >
                     Read More →

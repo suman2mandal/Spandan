@@ -1,44 +1,52 @@
-import Image from 'next/image';
+
+import clientPromise from '@/lib/mongodb';
+// import { mdxComponents } from '@/components/mdx-components/mdxComponents';
 import Link from 'next/link';
-import { compileMDX } from 'next-mdx-remote/rsc';
-import fs from 'fs/promises';
-import path from 'path';
 import CWrapper from '@/components/wrappers/component-wrapper';
+import Image from 'next/image';
+import { compileMDX } from 'next-mdx-remote/rsc';
 
 type Frontmatter = {
   title: string;
-  date?: string;
+  date: string;
+  description?: string;
   author?: string;
-  description: string;
-  coverImage: string;
-  tag: string;
+  coverImage?: string;
+  tag?: string;
 };
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const source = await fs.readFile(
-    path.join('content/blog', `${slug}.mdx`), 
-    'utf-8'
-  );
+  const title = decodeURIComponent(slug);
+
+  const client = await clientPromise;
+  const db = client.db('Blog');
+  
+  const post = await db.collection('Post').findOne({ slug: title });
+    // const post = await db.collection('Post').findOne({ slug: "brave-pup-saved-from-highway-chaos" });
+
+
+  if (!post || !post.content) return <>Custom page showing post not found!!</>
 
   const { content, frontmatter } = await compileMDX<Frontmatter>({
-    source,
+    source: post.content, // ← this must be 'source', not 'rawdata'
     options: { parseFrontmatter: true },
+    // components: mdxComponents,
   });
 
   return (
     <CWrapper>
-    <article className="prose">
-      <div className="max-w-screen-2xl mx-auto px-4 sm:px-10 md:px-16 py-10 relative">
-       <div className="overflow-hidden rounded-lg shadow-lg">
-         <Image
-          src={frontmatter.coverImage}
-          alt="Blog Hero"
-          width={1800}
-          height={500}
-          className="object-cover w-full h-96"
-          priority
-        />
+     <article className="prose">
+       <div className="max-w-screen-4xl relative">
+        <div className="overflow-hidden rounded-lg shadow-lg">
+          <Image
+            src={frontmatter.coverImage || "/images/SpandanLogo.png"}
+            alt="Blog Hero"
+            width={1800}
+            height={1000}
+            className="object-cover w-full h-96"
+            priority
+          />
       </div>
 
       {/* Blog Card */}
