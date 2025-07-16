@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import CWrapper from "@/components/wrappers/component-wrapper";
 import Heading from "@/components/wrappers/Header";
 import Image from "next/image";

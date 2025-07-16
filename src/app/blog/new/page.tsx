@@ -170,7 +170,17 @@ export default function BlogEditorPage() {
     }
 
     const html = editor.getHTML();
-    const markdown = turndownService.turndown(html);
+    let markdown = turndownService.turndown(html);
+
+    // Cleanup extra whitespace inside JSX-like tags
+    const tagsToClean = ['ListItem', 'Blockquote', 'Align', 'Color', 'FontSize', 'Heading'];
+    tagsToClean.forEach(tag => {
+      const regex = new RegExp(`<${tag}>([\\s\\S]*?)<\\/${tag}>`, 'g');
+      markdown = markdown.replace(regex, (_, content) => {
+        const trimmed = content.trim().replace(/\n\s*\n/g, '\n');
+        return `<${tag}>${trimmed}</${tag}>`;
+      });
+    });
 
     const frontmatter = `---\n` +
       `title: "${title.trim()}"\n` +
@@ -204,6 +214,7 @@ export default function BlogEditorPage() {
       setSaving(false);
     }
   };
+
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
