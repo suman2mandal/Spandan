@@ -125,3 +125,15 @@ html{
     @apply bg-background text-foreground;
   }
 }
+
+/* style editor-generated list items */
+.editor-content li {
+  display: list-item;
+  list-style-position: inside;
+  margin-left: 1rem;
+}
+
+.prose li > p {
+  display: inline;
+  margin: 0;
+}

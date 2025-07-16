@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 import aspectRatio from "@tailwindcss/aspect-ratio";
 import flowbitePlugin from "flowbite/plugin"; // ✅ Import Flowbite plugin properly
+import typography from "@tailwindcss/typography";
 
 const config: Config = {
   darkMode: 'class', // ✅ Enable class-based dark mode
@@ -22,6 +23,7 @@ const config: Config = {
   plugins: [
     aspectRatio,     // ✅ aspect-ratio plugin
     flowbitePlugin,  // ✅ properly added Flowbite
+    typography,
   ],
 };
 

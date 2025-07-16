@@ -5,6 +5,17 @@ import Link from 'next/link';
 import CWrapper from '@/components/wrappers/component-wrapper';
 import Image from 'next/image';
 import { compileMDX } from 'next-mdx-remote/rsc';
+import Color from '@/components/mdx-components/Color';
+import FontSize from '@/components/mdx-components/FontSize';
+import Underline from '@/components/mdx-components/Underline';
+import Heading from '@/components/mdx-components/Heading';
+import BulletList from '@/components/mdx-components/BulletList';
+import OrderedList from '@/components/mdx-components/OrderedList';
+import ListItem from '@/components/mdx-components/ListItem';
+import Blockquote from '@/components/mdx-components/Blockquote';
+import Align from '@/components/mdx-components/Align';
+import HorizontalRule from '@/components/mdx-components/HorizontalRule';
+
 
 type Frontmatter = {
   title: string;
@@ -16,13 +27,26 @@ type Frontmatter = {
 };
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+  const components = {
+    Underline,
+    FontSize,
+    Color,
+    Heading,
+    BulletList,
+    OrderedList,
+    ListItem,
+    Blockquote,
+    Align,
+    HorizontalRule,
+  };
+
   const { slug } = await params;
   const title = decodeURIComponent(slug);
 
   const client = await clientPromise;
   const db = client.db('Blog');
   
-  const post = await db.collection('Post').findOne({ slug: title });
+  const post = await db.collection('Posts').findOne({ slug: title });
     // const post = await db.collection('Post').findOne({ slug: "brave-pup-saved-from-highway-chaos" });
 
 
@@ -31,6 +55,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const { content, frontmatter } = await compileMDX<Frontmatter>({
     source: post.content, // ← this must be 'source', not 'rawdata'
     options: { parseFrontmatter: true },
+    components, // ← register components
     // components: mdxComponents,
   });
 

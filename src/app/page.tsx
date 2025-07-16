@@ -13,7 +13,6 @@ export default function Home() {
         <title>Spandan | Be the voice for voiceless</title>
         <meta name="description" content="Spandan - An animal welfare NGO. Be the voice for voiceless." />
       </Head>
-
       <div className="min-h-screen bg-white text-black">
         <div id="home">
         <Carousel />

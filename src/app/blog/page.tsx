@@ -3,7 +3,18 @@ import clientPromise from '@/lib/mongodb';
 import Image from 'next/image';
 import Link from 'next/link';
 import CWrapper from '@/components/wrappers/component-wrapper';
-import Heading from '@/components/wrappers/Header';
+// import Heading from '@/components/wrappers/Header';
+import Color from '@/components/mdx-components/Color';
+import FontSize from '@/components/mdx-components/FontSize';
+import Underline from '@/components/mdx-components/Underline';
+import Heading from '@/components/mdx-components/Heading';
+import BulletList from '@/components/mdx-components/BulletList';
+import OrderedList from '@/components/mdx-components/OrderedList';
+import ListItem from '@/components/mdx-components/ListItem';
+import Blockquote from '@/components/mdx-components/Blockquote';
+import Align from '@/components/mdx-components/Align';
+import HorizontalRule from '@/components/mdx-components/HorizontalRule';
+
 
 type Frontmatter = {
   title: string;
@@ -15,19 +26,34 @@ type Frontmatter = {
 };
 
 export default async function BlogSection() {
+  const components = {
+    Underline,
+    FontSize,
+    Color,
+    Heading,
+    BulletList,
+    OrderedList,
+    ListItem,
+    Blockquote,
+    Align,
+    HorizontalRule,
+  };
   const client = await clientPromise;
   const db = client.db('Blog');
 
   // Fetch all posts
-  const rawPosts = await db.collection('Post').find({}).toArray();
+  const rawPosts = await db.collection('Posts').find({}).toArray();
 
   // Extract metadata (frontmatter) from each post
   const posts = await Promise.all(
     rawPosts.map(async (post) => {
-      const { frontmatter } = await compileMDX<Frontmatter>({
-        source: post.content,
-        options: { parseFrontmatter: true },
-      });
+    const { frontmatter } = await compileMDX<Frontmatter>({
+      source: post.content,
+      options: { parseFrontmatter: true },
+      components,
+    });
+
+
 
       return {
         slug: post.slug, // assuming you have a slug field
@@ -39,10 +65,10 @@ export default async function BlogSection() {
   return (
     <CWrapper>
       <div>
-        <Heading
+        {/* <Heading
           title="Latest Updates & Stories"
           subtitle="Read inspiring stories, rescue operations, and important updates from Spandan’s journey in animal welfare."
-        />
+        /> */}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 auto-rows-[200px] md:auto-rows-[200px] gap-6 mb-16">
           {posts.map((post, index) => {
