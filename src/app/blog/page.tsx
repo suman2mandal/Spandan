@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { compileMDX } from 'next-mdx-remote/rsc';
 import clientPromise from '@/lib/mongodb';
 import Image from 'next/image';
@@ -52,8 +53,6 @@ export default async function BlogSection() {
       options: { parseFrontmatter: true },
       components,
     });
-
-
 
       return {
         slug: post.slug, // assuming you have a slug field

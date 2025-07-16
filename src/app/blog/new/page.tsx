@@ -43,7 +43,7 @@ export default function BlogEditorPage() {
       node.nodeName === 'SPAN' && (node as HTMLElement).style.color !== '',
     replacement: (content, node) => {
       const color = (node as HTMLElement).style.color;
-      return `{<Color color="${color}">${content}</Color>}`;
+      return `<Color color="${color}">${content}</Color>`;
     },
   });
 
@@ -52,7 +52,7 @@ export default function BlogEditorPage() {
       node.nodeName === 'SPAN' && (node as HTMLElement).style.fontSize !== '',
     replacement: (content, node) => {
       const fontSize = (node as HTMLElement).style.fontSize;
-      return `{<FontSize size="${fontSize}">${content}</FontSize>}`;
+      return `<FontSize size="${fontSize}">${content}</FontSize>`;
     },
   });
 
