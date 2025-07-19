@@ -139,9 +139,10 @@ export default function BlogEditorPage() {
         }),
         Blockquote.configure({
           HTMLAttributes: {
-            class: 'border-l-4 border-gray-400 pl-4 italic bg-gray-50 my-3',
+            class: 'border-l-4 border-gray-400 pl-4 italic bg-gray-50 dark:bg-gray-800 dark:text-white my-3 rounded',
           },
         }),
+
         Underline,
         Image.configure({ allowBase64: true }),
         TextStyle.configure({}),

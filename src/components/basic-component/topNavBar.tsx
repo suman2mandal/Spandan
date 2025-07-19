@@ -27,6 +27,14 @@ const navLinks = [
     href: '/animal-law',
   },
   {
+    name: 'login',
+    href: '/auth/login',
+  },
+  {
+    name: 'protected',
+    href: '/protected',
+  },
+  {
     name: 'How to Help',
     href: '/how-to-help',
     dropdown: [

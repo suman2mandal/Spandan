@@ -114,8 +114,6 @@ export default function GalleryGrid() {
       <VideoComparisonSlider
       previous="https://www.youtube.com/watch?v=eaWnC5WfYT0"
       current="https://www.youtube.com/watch?v=Qfk7_-Xs98k"
-      width={800}
-      height={450}
     />
     {/* <div className="max-w-3xl mx-auto py-10 px-4">
       <h1 className="text-2xl font-bold mb-6">Rescue Story Video</h1>

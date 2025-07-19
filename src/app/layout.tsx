@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from 'next-themes'
 import TopNavBar from "@/components/basic-component/topNavBar";
+import Providers from '@/redux/providers'; // ✅ Import the wrapper
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,15 +26,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-      <html lang="en" suppressHydrationWarning>
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <TopNavBar/>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Providers> {/* ✅ Wrap with Redux Provider wrapper */}
+            <TopNavBar />
             {children}
-          </ThemeProvider>
-        </body>
-      </html>
+          </Providers>
+        </ThemeProvider>
+      </body>
+    </html>
   );
 }

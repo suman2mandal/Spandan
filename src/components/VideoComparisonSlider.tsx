@@ -3,19 +3,14 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import YouTubeEmbed from './YouTubeEmbed';
 
-
 interface VideoComparisonSliderProps {
   previous: string; // video src URL
   current: string;  // video src URL
-  width?: number;
-  height?: number;
 }
 
 export default function VideoComparisonSlider({
   previous,
   current,
-  width = 700,
-  height = 500,
 }: VideoComparisonSliderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState(50);
@@ -54,19 +49,17 @@ export default function VideoComparisonSlider({
   return (
     <div
       ref={containerRef}
-      className={`relative mx-auto overflow-hidden rounded-xl shadow-lg select-none ${isDragging ? 'cursor-grabbing' : 'cursor-ew-resize'}`}
-      style={{ width, height }}
+      className={`relative w-full max-w-4xl aspect-video mx-auto overflow-hidden rounded-xl shadow-lg select-none ${isDragging ? 'cursor-grabbing' : 'cursor-ew-resize'}`}
       onMouseDown={startDrag}
       onTouchStart={startDrag}
     >
+      {/* Base Video */}
       <YouTubeEmbed url={previous} />
 
-      {/* Overlay (Current) Video */}
+      {/* Overlay Video */}
       <div
         className="absolute top-0 left-0 w-full h-full z-10"
-        style={{
-          clipPath: `inset(0 ${100 - position}% 0 0)`,
-        }}
+        style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
       >
         <YouTubeEmbed url={current} />
       </div>

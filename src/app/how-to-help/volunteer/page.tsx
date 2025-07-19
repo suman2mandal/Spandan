@@ -70,7 +70,7 @@ export default function VolunteerSection() {
               <label htmlFor="interest" className="block dark:text-teal-500 text-teal-900 font-medium">Area of Interest</label>
               <select
                 id="interest"
-                className="mt-1 block w-full rounded-md border border-gray-200 p-3 dark:text-white text-gray-700"
+                className="mt-1 block w-full rounded-md border border-gray-200 p-3 dark:bg-gray-700 dark:text-white text-gray-700"
                 required
               >
                 <option value="">Select one</option>

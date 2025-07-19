@@ -46,7 +46,7 @@ export default function CTA() {
             Learn More
           </Link>
           <Link
-            href="/donate"
+            href="/how-to-help/donate"
             className="inline-flex items-center px-6 py-3 bg-white text-green-700 hover:bg-gray-100 text-lg font-semibold rounded-full shadow-md transition-transform transform hover:scale-105"
           >
             Donate Now
