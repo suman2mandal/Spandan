@@ -15,13 +15,19 @@ export default function AnimalLawsPage() {
 
   useEffect(() => {
     const fetchLaws = async () => {
-      const res = await axios.get('/api/animal-law');
-      const data:Law[] = res.data;
-      dispatch(setLaws(data));
+      try {
+        if (laws.length > 0) return; // ✅ Already fetched, don't fetch again
+
+        const res = await axios.get('/api/animal-law');
+        const data: Law[] = res.data;
+        dispatch(setLaws(data));
+      } catch (err) {
+        console.error('Failed to fetch laws:', err);
+      }
     };
 
     fetchLaws();
-  }, [dispatch]);
+  }, [dispatch, laws]);
   
   if (!laws || laws.length === 0) return <>No Law currently available!!</>;
 

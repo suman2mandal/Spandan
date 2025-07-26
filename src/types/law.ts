@@ -9,5 +9,7 @@ export interface LawFrontmatter {
 }
 
 export interface Law extends LawFrontmatter {
+  slug: string; // unique identifier for the law
   content: string; // includes raw MDX content
+  createdAt?: Date|string; // optional, for creation date
 }

@@ -3,6 +3,13 @@ import Link from 'next/link';
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
 import Image from 'next/image';
+import { signOut } from 'next-auth/react';
+import { useDispatch } from 'react-redux';
+import { logout } from '@/redux/slices/userSlice';
+import { persistor } from '@/redux/store';
+import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 
 const navLinks = [
   {
@@ -25,14 +32,6 @@ const navLinks = [
   {
     name: 'Animal Law',
     href: '/animal-law',
-  },
-  {
-    name: 'login',
-    href: '/auth/login',
-  },
-  {
-    name: 'protected',
-    href: '/protected',
   },
   {
     name: 'How to Help',
@@ -58,8 +57,23 @@ export default function Navbar() {
   const { theme, setTheme, systemTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
   const [mounted, setMounted] = useState(false);
+  const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
+  const dispatch = useDispatch();
+  const router = useRouter();
 
   useEffect(() => setMounted(true), []);
+
+  const handleLogout = async () => {
+  // Sign out from NextAuth (handles Google and other providers)
+  await signOut({ redirect: false });
+  // Clear Redux state
+  dispatch(logout());
+  // Purge Redux Persist
+  await persistor.purge();
+  // Optionally, reload or redirect
+  router.push('/auth/login');
+  setTimeout(() => window.location.reload(), 100);
+  };
 
   return (
   <nav className="bg-white dark:bg-gray-900 shadow-md z-50 relative">
@@ -73,6 +87,8 @@ export default function Navbar() {
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-6 items-center">
           {navLinks.map((link) =>
+            link.name === 'Register' && isAuthenticated ? (
+              <></>):
             link.dropdown ? (
               <div key={link.name} className="relative group">
                 <Link
@@ -105,6 +121,32 @@ export default function Navbar() {
               </Link>
             )
           )}
+          
+          {isAuthenticated && (
+            <>
+              <Link href="/profile" className="text-gray-800 dark:text-white hover:text-green-600 font-medium">Profile</Link>
+            </>
+          )}
+
+          {isAuthenticated ? (
+            <button
+              onClick={() => {
+                handleLogout();
+              }}
+              className="text-red-600 hover:text-red-700 font-medium"
+            >
+              Logout
+            </button>
+          ) : (
+            <Link
+              href="/auth/login"
+              className="text-gray-800 dark:text-white hover:text-green-600 font-medium"
+            >
+              Login / Register
+            </Link>
+          )}
+
+
           <Link
             href="/how-to-help/donate"
             className="bg-green-600 text-white px-4 py-2 rounded-xl shadow hover:bg-green-700 transition-all font-semibold"
@@ -171,6 +213,8 @@ export default function Navbar() {
           </Link>
 
           {navLinks.map((link) => (
+            link.name === 'Register' && isAuthenticated ? (
+            <></>):
             <div key={link.name}>
               {link.dropdown ? (
                 <>
@@ -218,6 +262,40 @@ export default function Navbar() {
               )}
             </div>
           ))}
+
+
+          {isAuthenticated && (
+            <>
+              <Link
+                href="/profile"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block py-2 text-gray-800 dark:text-white font-medium hover:text-green-600"
+              >
+                Profile
+              </Link>
+            </>
+          )}
+
+          {isAuthenticated ? (
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                handleLogout();
+              }}
+              className="block w-full text-left py-2 text-red-600 font-medium hover:text-red-700"
+            >
+              Logout
+            </button>
+          ) : (
+            <Link
+              href="/auth/login"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block py-2 text-gray-800 dark:text-white font-medium hover:text-green-600"
+            >
+              Login / Register
+            </Link>
+          )}
+
           <Link
             href="/donate"
             onClick={() => setMobileMenuOpen(false)}

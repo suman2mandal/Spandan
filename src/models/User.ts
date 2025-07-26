@@ -1,15 +1,22 @@
-import { Schema, Document, models, model } from 'mongoose';
+// src/models/User.ts
 
-export interface IUser extends Document {
+import { Schema, model, models } from 'mongoose';
+
+export interface IUser {
   name: string;
   email: string;
+  image?: string;
   password?: string;
+  provider?: 'google' | 'credentials';
 }
 
 const UserSchema = new Schema<IUser>({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String,required: true }, // Optional if you support social login
+  image: { type: String },
+  password: { type: String }, // optional
+  provider: { type: String }, // 'google' | 'credentials'
 });
 
-export const User = models.User || model<IUser>('User', UserSchema);
+export const getUserModel = () =>
+  models.User || model<IUser>('User', UserSchema);

@@ -13,7 +13,6 @@ import axios from 'axios';
 export default function AnimalLawPage() {
   const params = useParams();
   const slug = decodeURIComponent(params?.slug as string || '');
-
   const laws = useSelector((state: RootState) => state.animalLaw.laws);
   const [law, setLaw] = useState<Law | null>(null);
   const [frontmatter, setFrontmatter] = useState<LawFrontmatter | null>(null);

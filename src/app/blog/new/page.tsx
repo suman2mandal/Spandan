@@ -197,6 +197,8 @@ export default function BlogEditorPage() {
     setSaving(true);
 
     try {
+      // console.log('Saving post with title:', title.trim());
+      // console.log('Final content:', finalContent);
       await axios.post('/api/blog/create', {
         slug: title.trim(),
         content: finalContent,

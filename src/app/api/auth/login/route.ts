@@ -1,18 +1,21 @@
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
-import { User } from '@/models/User';
-import {connectToDB} from '@/lib/connectToDB';
+import {getUserModel} from '@/models/User';
+// import {connectToDB} from '@/lib/connectToDB';
+import {connectToSpandanDB} from '@/lib/connectToSpandanDB';
 import { signJWT } from '@/utils/jwt';
 
 export async function POST(req: Request) {
   try {
-    await connectToDB('AuthDB');
+    // await connectToDB('AuthDB');
+    await connectToSpandanDB();
     const { email, password } = await req.json();
-
+    console.log('Login attempt:.............', { email });
     if (!email || !password) {
       return NextResponse.json({ message: 'Email and password are required' }, { status: 400 });
     }
 
+    const User = await getUserModel(); // await the model
     const user = await User.findOne({ email });
 
     if (!user || !user.password) {

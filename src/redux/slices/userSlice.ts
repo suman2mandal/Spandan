@@ -1,14 +1,20 @@
-'use client';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface User {
-  _id?: string;
+  id?: string;
   name: string;
   email: string;
+  image?: string | null;
 }
 
-const initialState: { user: User | null } = {
+interface UserState {
+  user: User | null;
+  isAuthenticated: boolean;
+}
+
+const initialState: UserState = {
   user: null,
+  isAuthenticated: false,
 };
 
 const userSlice = createSlice({
@@ -16,19 +22,17 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action: PayloadAction<User>) => {
+      console.log("User logged in:...........", action.payload);
       state.user = action.payload;
-      localStorage.setItem('user', JSON.stringify(action.payload));
+      state.isAuthenticated = true;
     },
     logout: (state) => {
       state.user = null;
-      localStorage.removeItem('user');
-    },
-    loadUserFromStorage: (state) => {
-      const data = localStorage.getItem('user');
-      if (data) state.user = JSON.parse(data);
+      state.isAuthenticated = false;
+      console.log('User logged out. Current state:', state);
     },
   },
 });
 
-export const { login, logout, loadUserFromStorage } = userSlice.actions;
+export const { login, logout } = userSlice.actions;
 export default userSlice.reducer;

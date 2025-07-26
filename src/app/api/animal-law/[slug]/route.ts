@@ -1,12 +1,14 @@
-import { connectToDB } from '@/lib/connectToDB';
-import { AnimalLaw } from '@/models/AnimalLaw';
+import {connectToSpandanDB} from '@/lib/connectToSpandanDB';
+import AnimalLaw from '@/models/AnimalLaw';
 
 
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ slug: string }> }
 ) {
-  await connectToDB('Animal-Law');
+  // await connectToDB('Animal-Law');
+  await connectToSpandanDB();
+  // console.log('Fetching law with slug:', params);
   // Await the params promise and extract 'slug'
   const { slug } = await params;
   const decodedSlug = decodeURIComponent(slug);

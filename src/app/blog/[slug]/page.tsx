@@ -1,13 +1,20 @@
+'use client';
 
-import clientPromise from '@/lib/mongodb';
-// import { mdxComponents } from '@/components/mdx-components/mdxComponents';
-import Link from 'next/link';
-import CWrapper from '@/components/wrappers/component-wrapper';
-import Image from 'next/image';
+import { useParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { compileMDX } from 'next-mdx-remote/rsc';
-import Color from '@/components/mdx-components/Color';
-import FontSize from '@/components/mdx-components/FontSize';
+import { RootState } from '@/redux/store';
+import type { Post, PostFrontmatter } from '@/types/post';
+import CWrapper from '@/components/wrappers/component-wrapper';
+import Link from 'next/link';
+import axios from 'axios';
+import Image from 'next/image';
+
+// MDX Components
 import Underline from '@/components/mdx-components/Underline';
+import FontSize from '@/components/mdx-components/FontSize';
+import Color from '@/components/mdx-components/Color';
 import Heading from '@/components/mdx-components/Heading';
 import BulletList from '@/components/mdx-components/BulletList';
 import OrderedList from '@/components/mdx-components/OrderedList';
@@ -16,18 +23,18 @@ import Blockquote from '@/components/mdx-components/Blockquote';
 import Align from '@/components/mdx-components/Align';
 import HorizontalRule from '@/components/mdx-components/HorizontalRule';
 
+export default function BlogPostPage() {
+  const slug = useParams();
+  const decodedSlug = decodeURIComponent(slug?.slug as string || '');
+  const blogs = useSelector((state: RootState) => state.blog.post);
 
-type Frontmatter = {
-  title: string;
-  date: string;
-  description?: string;
-  author?: string;
-  coverImage?: string;
-  tag?: string;
-};
+  const [post, setPost] = useState<Post | null>(null);
+  const [frontmatter, setFrontmatter] = useState<PostFrontmatter | null>(null);
+  const [compiledContent, setCompiledContent] = useState<React.ReactNode | null>(null);
+  const [loading, setLoading] = useState(true);
 
-export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
-  const components = {
+  const components = useMemo(() => 
+  ({
     Underline,
     FontSize,
     Color,
@@ -38,80 +45,110 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     Blockquote,
     Align,
     HorizontalRule,
-  };
+  }),[]);
 
-  const { slug } = await params;
-  const title = decodeURIComponent(slug);
+  useEffect(() => {
+    const loadPost = async () => {
+      if (!decodedSlug) {
+        setLoading(false);
+        return;
+      }
 
-  const client = await clientPromise;
-  const db = client.db('Blog');
-  
-  const post = await db.collection('Posts').findOne({ slug: title });
-    // const post = await db.collection('Post').findOne({ slug: "brave-pup-saved-from-highway-chaos" });
+      setLoading(true);
+
+      // ✅ Step 1: Try Redux
+      let found = blogs.find((post) => post.slug === decodedSlug);
+
+      if (!found) {
+        console.log('❌ Not found in Redux, fetching from API:', decodedSlug);
+        try {
+          const res = await axios.get(`/api/blog/getBlog/${encodeURIComponent(decodedSlug)}`);
+          found = res.data;
+        } catch (err) {
+          console.error('❌ Blog fetch error:', err);
+          setPost(null);
+          setCompiledContent(null);
+          setLoading(false);
+          return;
+        }
+      } else {
+        console.log('✅ Loaded from Redux:', found.title);
+      }
+
+      if (!found) {
+        setPost(null);
+        setCompiledContent(null);
+        setLoading(false);
+        return;
+      }
+
+      setPost(found);
+
+      try {
+        const { content, frontmatter } = await compileMDX<PostFrontmatter>({
+          source: found.content,
+          options: { parseFrontmatter: true },
+          components,
+        });
+
+        setFrontmatter(frontmatter);
+        setCompiledContent(content);
+      } catch (err) {
+        console.error('❌ MDX compile error:', err);
+        setCompiledContent(null);
+      }
+
+      setLoading(false);
+    };
+
+    loadPost();
+  }, [decodedSlug, blogs, components]);
 
 
-  if (!post || !post.content) return <>Custom page showing post not found!!</>
+  if (loading) return <p className="text-center mt-10">Loading post...</p>;
 
-  const { content, frontmatter } = await compileMDX<Frontmatter>({
-    source: post.content, // ← this must be 'source', not 'rawdata'
-    options: { parseFrontmatter: true },
-    components, // ← register components
-    // components: mdxComponents,
-  });
+  if (!post || !compiledContent || !frontmatter)
+    return <p className="text-center text-red-500 mt-10">404 – Blog post not found.</p>;
 
   return (
     <CWrapper>
-     <article className="prose">
-       <div className="max-w-screen-4xl relative">
-        <div className="overflow-hidden rounded-lg shadow-lg">
+      <article className="prose dark:text-white prose-teal max-w-none dark:prose-invert">
+        <div className="relative mb-10 rounded-xl overflow-hidden shadow-lg">
           <Image
-            src={frontmatter.coverImage || "/images/SpandanLogo.png"}
-            alt="Blog Hero"
+            src={frontmatter.coverImage || '/images/SpandanLogo.png'}
+            alt={frontmatter.title}
             width={1800}
-            height={1000}
-            className="object-cover w-full h-96"
+            height={900}
+            className="object-cover w-full h-80 sm:h-[32rem]"
             priority
           />
-      </div>
-
-      {/* Blog Card */}
-      <div className="max-w-6xl mx-auto -mt-32 z-10 relative">
-        <div className="bg-white shadow-xl rounded-lg p-6 sm:p-10">
-          <h1 className="text-2xl sm:text-5xl font-bold text-gray-900 mb-4">
-            {frontmatter.title}
-          </h1>
-
-          <p className="text-sm text-gray-600 mb-2">
-            Written By:{' '}
-            <Link href="#" className="text-teal-600 hover:text-teal-800 font-semibold">
-              {frontmatter.author}
-            </Link>{' '}
-            On{' '}
-            <Link href="#" className="text-teal-600 hover:text-teal-800 text-sm">
-              {frontmatter.date}
-            </Link>
-          </p>
-
-          <div className="text-gray-700 leading-relaxed space-y-6 mt-6 text-base">
-            {content}
-          </div>
-
-          {/* Tags */}
-          {frontmatter.tag?.split(',').map((tag: string) => (
-            <Link
-              key={tag.trim()}
-              href="#"
-              className="text-sm mr-2 text-teal-600 hover:text-teal-800 font-medium"
-            >
-              #{tag.trim()}
-            </Link>
-          ))}
-
-
         </div>
-      </div>
-    </div>
-    </article>
+
+        <h1 className="text-3xl sm:text-5xl font-bold">{frontmatter.title}</h1>
+        <p className="text-sm text-gray-600 mb-6">
+          Written by <strong>{frontmatter.author || 'Unknown'}</strong> on{' '}
+          {frontmatter.date || 'Unknown date'}
+        </p>
+
+        {compiledContent}
+
+        <div className="mt-8 flex gap-2">
+          {frontmatter.tag?.split(',').map((tag) => (
+            <span key={tag} className="text-sm text-teal-600 font-medium">
+              #{tag.trim()}
+            </span>
+          ))}
+        </div>
+
+        <div className="mt-12 flex justify-between text-sm text-teal-600">
+          <Link href="/blog/sample-prev-post" className="hover:underline">
+            ← Previous Post
+          </Link>
+          <Link href="/blog/sample-next-post" className="hover:underline">
+            Next Post →
+          </Link>
+        </div>
+      </article>
     </CWrapper>
   );
 }

@@ -1,27 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server';
-import clientPromise from '@/lib/mongodb';
+import {connectToSpandanDB} from '@/lib/connectToSpandanDB';
+import BlogPost from '@/models/BlogPost';
 
 export async function POST(req: NextRequest) {
   try {
     const { slug, content } = await req.json();
 
+    console.log('Received slug:', slug);
+    console.log('Received content length:', content.length);
     if (!slug || !content) {
-      return NextResponse.json({ error: 'Missing title or content' }, { status: 400 });
+      return NextResponse.json({ error: 'Missing slug or content' }, { status: 400 });
     }
 
-    const client = await clientPromise;
-    const db = client.db('Blog'); // Replace with your DB name
-    const posts = db.collection('Posts');
+    await connectToSpandanDB();
 
-    await posts.insertOne({
+    await BlogPost.create({
       slug,
       content,
       createdAt: new Date(),
     });
 
     return NextResponse.json({ message: 'Post saved successfully' }, { status: 200 });
-  } catch (err) {
-    console.error('Error saving blog post:', err);
+  } catch (error) {
+    console.error('Error saving blog post:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

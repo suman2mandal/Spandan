@@ -1,14 +1,15 @@
-// app/api/animal-law/route.ts
-import { connectToDB } from '@/lib/connectToDB';
-import { AnimalLaw } from '@/models/AnimalLaw';
+import {connectToSpandanDB} from '@/lib/connectToSpandanDB';
+import AnimalLaw from '@/models/AnimalLaw';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    await connectToDB('Animal-Law');
+    await connectToSpandanDB();
+    console.log("✅ Connected to Spandan DB for Animal Law"); // Calling every time fix it
     const laws = await AnimalLaw.find({});
     return NextResponse.json(laws);
-  } catch {
+  } catch (error) {
+    console.error('❌ Failed to fetch laws:', error);
     return NextResponse.json({ error: 'Failed to fetch laws' }, { status: 500 });
   }
 }
