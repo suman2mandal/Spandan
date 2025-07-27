@@ -1,12 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile } from 'fs/promises';
-import path from 'path';
-// import { connectToDB } from '@/lib/connectToDB';
-import {connectToSpandanDB} from '@/lib/connectToSpandanDB'; // Adjust import based on your structure
-// import User from '@/models/User';
-import { getUserModel } from '@/models/User'; // Adjust import based on your structure
-import bcrypt from 'bcryptjs'; // Add this
-// import crypto from 'crypto';
+import {connectToSpandanDB} from '@/lib/connectToSpandanDB';
+import { getUserModel } from '@/models/User';
+import bcrypt from 'bcryptjs';
+import cloudinary from '@/lib/cloudinary';
 
 export async function POST(req: NextRequest) {
   try {
@@ -32,26 +28,27 @@ export async function POST(req: NextRequest) {
     }
 
     // Save image
+    // ⬇️ Convert image to base64 string (buffer upload)
     const bytes = await profileImage.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    const filename = `${Date.now()}-${profileImage.name}`;
-    const uploadPath = path.join(process.cwd(), 'public', 'uploads', filename);
 
-    await writeFile(uploadPath, buffer);
+    const base64Image = `data:${profileImage.type};base64,${buffer.toString('base64')}`;
+
+    // ⬆️ Upload to Cloudinary
+    const uploadResult = await cloudinary.uploader.upload(base64Image, {
+      folder: 'spandan-profile-images',
+    });
+
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    // const token = crypto.randomBytes(32).toString('hex');
-    // const verificationToken = token;
-    // const verificationTokenExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24h
+
 
     const newUser = new User({
       name,
       email,
       password: hashedPassword,
-      image: `/uploads/${filename}`, // rename `profileImage` -> `image`
-      // verificationToken: verificationToken,
-      // verificationTokenExpires: verificationTokenExpires,
-      provider: 'credentials',       // match Google schema
+      image: uploadResult.secure_url,
+      provider: 'credentials',
     });
 
     await newUser.save();
