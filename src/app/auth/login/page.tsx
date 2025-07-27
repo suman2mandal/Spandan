@@ -32,10 +32,8 @@ export default function LoginPage() {
     }
 
     const session: Session | null = await getSession();
-    console.log('Session:............', session);
 
     if (result?.ok && session?.user) {
-      console.log('Login successful:', session.user);
       dispatch(
         login({
           name: session.user.name ?? '',
