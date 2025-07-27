@@ -50,7 +50,7 @@ export default function RegisterPage() {
   };
 
   const handleGoogleAuth = () => {
-    signIn('google', { callbackUrl: '/' }); // or use '/dashboard' if that's your landing page
+    signIn('google', { callbackUrl: '/profile' }); // or use '/dashboard' if that's your landing page
   };
 
 

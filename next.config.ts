@@ -13,7 +13,7 @@ const nextConfig = {
   experimental: {
     mdxRs: true,
   },
-  
+
   pageExtensions: ['ts', 'tsx', 'mdx', 'js', 'jsx', 'md'],
   images: {
     remotePatterns: [
@@ -44,6 +44,10 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'cdn.pixabay.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com', // ✅ Added Google profile images
       },
     ],
   },

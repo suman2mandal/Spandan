@@ -47,7 +47,7 @@ export async function POST(req: Request) {
         process.env.NODE_ENV === 'production' ? 'Secure;' : ''
       }`
     );
-
+    console.log(response, 'response.headers');
     return response;
   } catch (error) {
     console.error('[LOGIN_ERROR]', error);
