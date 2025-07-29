@@ -37,7 +37,7 @@ export default function RegisterPage() {
           'Content-Type': 'multipart/form-data',
         },
       });
-      router.push('/auth/login');
+      router.push('/auth/login');// Please verify your email to complete registration
     } catch (err: unknown) {
       if (axios.isAxiosError(err) && err.response) {
         setError(err.response.data?.message || 'Registration failed.');

@@ -8,7 +8,9 @@ import ContactSupport from "@/components/contact-support";
 type FAQ = {
   question: string;
   answer: ReactNode;
+  category: string;
 };
+
 
 const faqData: FAQ[] = [
   {
@@ -20,6 +22,7 @@ const faqData: FAQ[] = [
         information. After verification, your account will be ready to use.
       </p>
     ),
+    category: "Account",
   },
   {
     question: "What payment methods do you accept?",
@@ -36,6 +39,7 @@ const faqData: FAQ[] = [
         </ul>
       </>
     ),
+    category: "Billing",
   },
   {
     question: "Can I cancel my subscription anytime?",
@@ -46,6 +50,7 @@ const faqData: FAQ[] = [
         any cancellation fees.
       </p>
     ),
+    category: "Billing",
   },
   {
     question: "How do I reset my password?",
@@ -60,6 +65,7 @@ const faqData: FAQ[] = [
         </ol>
       </>
     ),
+    category: "Account",
   },
   {
     question: "Is there a mobile app available?",
@@ -70,6 +76,7 @@ const faqData: FAQ[] = [
         web version and mobile apps.
       </p>
     ),
+    category: "Features",
   },
 ];
 
@@ -81,6 +88,17 @@ export default function FAQPage() {
     setOpenIndex((prev) => (prev === index ? null : index));
   };
 
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // const filteredFAQs = faqData.filter((faq) =>
+  //   faq.question.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
+  
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const filteredFAQs = faqData.filter((faq) =>
+  (selectedCategory === "All" || faq.category === selectedCategory) &&
+  faq.question.toLowerCase().includes(searchTerm.toLowerCase())
+);
   return (
     <div className="max-w-4xl mx-auto px-4 py-20 relative">
       {/* Header */}
@@ -94,36 +112,36 @@ export default function FAQPage() {
       {/* Search */}
       <div className="mb-10">
         <div className="relative max-w-xl mx-auto">
-          <input
-            type="text"
-            placeholder="Search FAQs..."
-            className="w-full px-5 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
-          />
-          <button className="absolute right-3 top-3 text-gray-400 hover:text-teal-600">
-            <ChevronDown size={18} />
-          </button>
+        <input
+          type="text"
+          placeholder="Search FAQs..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full px-5 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
+        />
         </div>
       </div>
 
-      {/* Categories */}
       <div className="flex flex-wrap justify-center gap-3 mb-10">
         {["All", "Account", "Billing", "Features", "Support"].map((cat) => (
           <button
             key={cat}
+            onClick={() => setSelectedCategory(cat)}
             className={`px-4 py-2 rounded-full transition border ${
-              cat === "All"
+              cat === selectedCategory
                 ? "bg-teal-600 text-white hover:bg-teal-700"
                 : "bg-white text-teal-600 border-teal-600 hover:bg-teal-50"
             }`}
           >
-            {cat}
+          {cat}
           </button>
         ))}
       </div>
 
+
       {/* FAQ List */}
       <div className="space-y-4">
-        {faqData.map((faq, index) => (
+        {filteredFAQs.map((faq, index) => (
           <div
             key={index}
             className="bg-white rounded-xl shadow-md overflow-hidden transition hover:shadow-lg"
@@ -141,7 +159,7 @@ export default function FAQPage() {
               />
             </button>
             {openIndex === index && (
-              <div className="px-6 pb-6 text-gray-600">{faq.answer}</div>
+              <div className="px-6 pb-6 text-gray-600 animate-fade-in">{faq.answer}</div>
             )}
           </div>
         ))}

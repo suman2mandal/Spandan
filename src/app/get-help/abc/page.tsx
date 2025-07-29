@@ -80,7 +80,7 @@ export default function AnimalBirthControl() {
             </ul>
 
             <div className="mt-10 text-center">
-              <Link href="/donate" passHref>
+              <Link href="/how-to-help/donate" passHref>
                 <button className="bg-teal-600 hover:bg-teal-700 text-white font-semibold px-6 py-3 rounded-full transition-all">
                   Support This Cause
                 </button>
