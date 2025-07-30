@@ -8,6 +8,8 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
+import Heading from '@/components/wrappers/Header';
+import { NextResponse } from 'next/server';
 
 export default function VolunteerForm() {
   const router = useRouter();
@@ -41,7 +43,7 @@ export default function VolunteerForm() {
     }
 
     try {
-      const res = await axios.post('/api/volunteer-request', formData, {
+      await axios.post('/api/volunteer-request', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${session?.user}`, // Adjust if session.user is not a token
@@ -50,15 +52,36 @@ export default function VolunteerForm() {
 
       toast.success('Volunteer application submitted!');
       router.push('/how-to-help/volunteer/thank-you');
-    } catch (error: any) {
-      toast.error(error?.response?.data?.message || 'Submission failed.');
-      console.error(error);
+    } catch (error: unknown) {
+        console.error('Volunteer form error:', error);
+        const message = error instanceof Error ? error.message : 'Something went wrong';
+        return NextResponse.json({ message }, { status: 500 });
     }
   };
 
 
   return (
     <CWrapper>
+      <Heading
+          title="Volunteer With Animals"
+          subtitle="Your time and compassion can make a real difference. Whether it’s rescue, shelter care, or spreading awareness, there&apos;s a place for your kindness at Spandan."
+        />
+
+        {/* Volunteer Opportunities */}
+        <div className="grid gap-8 md:grid-cols-3 mb-16">
+          <div className="dark:bg-gray-700 rounded-2xl shadow-sm border border-gray-200  dark:border-gray-900 p-6">
+            <h3 className="text-xl font-semibold  dark:text-teal-500 text-teal-900 mb-2">Rescue Support</h3>
+            <p className="text-gray-700 dark:text-white">Help us respond to distress calls, locate injured animals, and safely bring them to treatment centers.</p>
+          </div>
+          <div className="dark:bg-gray-700 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-900 p-6">
+            <h3 className="text-xl font-semibold dark:text-teal-500 text-teal-900 mb-2">Shelter Care</h3>
+            <p className="text-gray-700 dark:text-white">Spend time at our shelter — feeding, cleaning, and giving emotional support to animals in recovery.</p>
+          </div>
+          <div className="dark:bg-gray-700 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-900 p-6">
+            <h3 className="text-xl font-semibold dark:text-teal-500 text-teal-900 mb-2">Awareness & Events</h3>
+            <p className="text-gray-700 dark:text-white">Join public campaigns, educate communities, and help organize adoption & vaccination drives.</p>
+          </div>
+        </div>
       <div className="dark:bg-gray-700 dark:border-gray-900 p-3 sm:p-8 border border-gray-200 rounded-2xl shadow-sm">
         <h3 className="text-2xl font-semibold dark:text-teal-500 text-teal-900 mb-6 text-center">
           Join as a Volunteer

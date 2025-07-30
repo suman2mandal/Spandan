@@ -21,7 +21,7 @@ async function sendSupportMessage({
     });
 
     return res.data;
-  } catch (error) {
+  } catch {
     throw new Error("Failed to send support message.");
   }
 }

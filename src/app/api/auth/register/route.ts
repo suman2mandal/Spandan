@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
   try {
     await sendVerificationEmail(email, token);
     return Response.json({ success: true, message: 'Verification email sent' });
-  } catch (err) {
+  } catch {
     return Response.json({ error: 'Failed to send email' }, { status: 500 });
   }
 }

@@ -39,7 +39,7 @@ export async function GET(req: Request) {
     await newUser.save();
     
     return NextResponse.redirect(new URL('/auth/login', req.url));
-  } catch (err) {
+  } catch{
     return Response.json({ error: 'Invalid or expired token' }, { status: 400 });
   }
 }

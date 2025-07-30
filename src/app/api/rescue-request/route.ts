@@ -3,6 +3,7 @@ import { getToken } from 'next-auth/jwt';
 import { connectToSpandanDB } from '@/lib/connectToSpandanDB';
 import { RescueRequest } from '@/models/RescueRequest';
 import cloudinary from '@/lib/cloudinary';
+import { PassThrough } from 'stream';
 
 export async function POST(req: NextRequest) {
   try {
@@ -24,7 +25,7 @@ export async function POST(req: NextRequest) {
     }
 
     let mediaUrl = '';
-    const stream = require('stream');
+    // const stream = require('stream');
 
     if (file && file instanceof File) {
       const arrayBuffer = await file.arrayBuffer();
@@ -40,7 +41,7 @@ export async function POST(req: NextRequest) {
           }
         );
 
-        const bufferStream = new stream.PassThrough();
+        const bufferStream = new PassThrough();
         bufferStream.end(buffer);
         bufferStream.pipe(uploadStream);
       });
@@ -58,8 +59,9 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ success: true, request: newRequest });
-  } catch (err: any) {
-    console.error(err);
-    return NextResponse.json({ error: 'Server error', details: err.message }, { status: 500 });
+  } catch (error: unknown) {
+    console.error('Volunteer form error:', error);
+    const message = error instanceof Error ? error.message : 'Something went wrong';
+    return NextResponse.json({ message }, { status: 500 });
   }
 }

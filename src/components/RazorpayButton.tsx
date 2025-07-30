@@ -4,24 +4,58 @@ import Script from 'next/script';
 import { useState } from 'react';
 import axios from 'axios';
 
+interface RazorpayPaymentResponse {
+  razorpay_order_id: string;
+  razorpay_payment_id: string;
+  razorpay_signature: string;
+}
+
+interface RazorpayOptions {
+  key: string;
+  amount: number;
+  currency: string;
+  name: string;
+  description: string;
+  order_id: string;
+  handler: (response: RazorpayPaymentResponse) => void;
+  prefill?: {
+    name?: string;
+    email?: string;
+    contact?: string;
+  };
+  notes?: Record<string, string>;
+  theme?: {
+    color?: string;
+  };
+}
+
+declare global {
+  interface Window {
+    Razorpay: new (options: RazorpayOptions) => RazorpayInstance;
+  }
+
+  interface RazorpayInstance {
+    open(): void;
+  }
+}
+
 export default function RazorpayButton() {
   const [loading, setLoading] = useState(false);
 
   const handlePayment = async () => {
     setLoading(true);
     try {
-      const res = await axios.post('/api/razorpay', { amount: 500 }); // Amount in INR
-
+      const res = await axios.post('/api/razorpay', { amount: 500 });
       const { id: order_id, amount, currency } = res.data;
 
-      const options = {
+      const options: RazorpayOptions = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
         amount,
         currency,
         name: 'Spandan NGO',
         description: 'Donation Payment',
         order_id,
-        handler: function (response: any) {
+        handler: function (response: RazorpayPaymentResponse) {
           alert('Payment Successful!');
           console.log(response);
         },
@@ -38,7 +72,7 @@ export default function RazorpayButton() {
         },
       };
 
-      const rzp = new (window as any).Razorpay(options);
+      const rzp = new window.Razorpay(options);
       rzp.open();
     } catch (err) {
       console.error('Payment Failed:', err);

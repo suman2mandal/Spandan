@@ -2,36 +2,10 @@
 
 import CWrapper from '@/components/wrappers/component-wrapper';
 import Heading from '@/components/wrappers/Header';
-import React, { useState } from 'react';
+import React from 'react';
 import RescueRequestForm from '@/components/rescue-request-form';
 
 export default function RescueHelpPage() {
-  const [formData, setFormData] = useState({
-    location: '',
-    description: '',
-    file: null as File | null,
-    name: '',
-    phone: '',
-    email: '',
-  });
-
-  const [message, setMessage] = useState('');
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    setFormData(prev => ({ ...prev, file }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setMessage('✅ Thank you! We will contact you within 1–3 hours if your request falls within our area & capacity.&apos;');
-  };
-
   return (
     <CWrapper>
       <main className="dark:text-white text-teal-900 min-h-screen">
